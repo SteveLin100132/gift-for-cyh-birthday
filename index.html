@@ -22,7 +22,7 @@
 
 html, body {
 	width: 100vw;
-	height: 100vh;
+	height: 100%;
 }
 
 body {
@@ -33,7 +33,7 @@ body {
 
 #start {
 	width: 100vw;
-	height: 100vh;
+	height: 100%;
 	/* background: rgb(254, 120, 121); */
 	background: #f6d18e;
 	position: absolute;
@@ -655,7 +655,7 @@ $(document).ready(function() {
 	
 	function start() {
 		// 音樂播放並顯示開始畫面
-		// audio.play();
+		audio.play();
 		$(".start").fadeOut(1); 
 		
 		// 呈現初始的房間配置
