@@ -34,16 +34,97 @@ body {
 #start {
 	width: 100vw;
 	height: 100%;
-	/* background: rgb(254, 120, 121); */
 	background: #f6d18e;
 	position: absolute;
 	z-index: 8;
-	font-family: 'Sketch';
+	font-family: 'Chinese';
 	font-size: 150px;
 	color: #fff;
 	text-align: center;
 	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
+
+.start-btn {
+	position: relative;
+	padding: 18px 54px;
+	font-size: 2rem;
+	font-family: 'Chinese';
+	font-size: 4rem;
+	color: #5e3c1a;
+	background: #ffe7ad;
+	border: 3px solid #65cfcf;
+	border-radius: 22px 36px 28px 22px / 36px 22px 22px 28px;
+	box-shadow: 0 8px 24px 0 rgba(120, 180, 255, 0.15), 0 2px 8px #fff;
+	cursor: pointer;
+	transition: transform 0.18s, box-shadow 0.18s;
+	letter-spacing: 2px;
+	text-shadow: 1px 2px 0 #fff9e0, 0 2px 6px #b9d0f6;
+}
+
+.start-btn::before {
+	content: '';
+	position: absolute;
+	left: 12px; 
+	top: 10px;
+	width: 22px;
+	height: 22px;
+	background: radial-gradient(circle, #65cfcf 70%, #fff7b8 100%);
+	border-radius: 50%;
+	opacity: 0.7;
+	box-shadow: 0 0 12px #65cfcf55;
+}
+
+.start-btn::after {
+	content: '';
+	position: absolute;
+	right: 18px;
+	bottom: 10px;
+	width: 16px;
+	height: 16px;
+	background: radial-gradient(circle, #ffbcbc 70%, #fff6d6 100%);
+	border-radius: 50%;
+	opacity: 0.7;
+	box-shadow: 0 0 8px #ffbcbc55;
+}
+
+.banner-flags {
+	position: absolute;
+	top: -90px;
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	gap: 3px;
+	z-index: 1;
+}
+
+.flag {
+	width: 22px;
+	height: 20px;
+	border-radius: 3px;
+	display: inline-block;
+	font-size: 1rem;
+	font-family: inherit;
+	font-size: 3rem;
+	text-align: center;
+	line-height: 21px;
+	color: #fff;
+	font-weight: bold;
+	box-shadow: 0 1px 2px #aaa;
+	padding: 20px;
+}
+
+.flag.flag-yellow { background: #ffe75c; color: #5e3c1a; }
+
+.flag.flag-blue { background: #65cfcf; color: #fff; }
+
+.flag.flag-red { background: #ffbcbc; color: #fff; }
+
+.flag.flag-green { background: #63d798; color: #fff; }
+
+.flag.flag-orange { background: #ffb96c; color: #fff; }
 
 .boxlight {
 	width: 100%;
@@ -131,7 +212,7 @@ body {
 }
 
 .girl {
-	position: absolute;
+	position: fixed;
 }
 
 .girl-img {
@@ -139,6 +220,7 @@ body {
 }
 
 .floor {
+	position: fixed;
 	width: 100%;
 }
 
@@ -183,6 +265,7 @@ body {
 }
 
 .birthday {
+	position: fixed;
 	width: 100%;
 	height: 250px;
 	display: flex;
@@ -211,40 +294,47 @@ body {
 }
 
 .window {
+	position: fixed;
 	opacity: 0;
 }
 
 .TV {
+	position: fixed;
 	cursor: pointer;
 	opacity: 0;
 }
 
 .desk {
+	position: fixed;
 	opacity: 0;
 }
 
 .picture {
+	position: fixed;
 	opacity: 0;
 	cursor: pointer;
 }
 
 .balloon {
+	position: fixed;
 	opacity: 0;
 }
 
 .calender {
+	position: fixed;
 	opacity: 0;
 	cursor: pointer;
 }
 
 .sofa {
+	position: fixed;
 	opacity: 0;
 	cursor: pointer;
 }
 
 .talk_prompt {
 	opacity: 0;
-	position: relative;
+	position: fixed;
 }
 
 .talk_prompt > .next_step {
@@ -261,7 +351,7 @@ body {
 
 .mail {
 	opacity: 0;
-	position: relative;
+	position: fixed;
 }
 
 .mail > .mail-content {
@@ -309,6 +399,7 @@ body {
 }
 
 .gift {
+	position: fixed;
 	opacity: 0;
 }
 
@@ -480,8 +571,54 @@ body {
 </style>
 
 <body>
+	<!-- 載入畫面 -->
+	<div id="loading-screen" style="
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: linear-gradient(45deg, #f6d18e, #ffb74d);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		z-index: 10;
+		font-family: 'Sketch', Arial, sans-serif;
+		color: #fff;
+		font-size: 36px;
+	">
+		<div style="margin-bottom: 30px;">載入中...</div>
+		<div id="loading-progress" style="
+			width: 300px;
+			height: 6px;
+			background: rgba(255,255,255,0.3);
+			border-radius: 3px;
+			overflow: hidden;
+		">
+			<div id="progress-bar" style="
+				width: 0%;
+				height: 100%;
+				background: #fff;
+				border-radius: 3px;
+				transition: width 0.3s ease;
+			"></div>
+		</div>
+		<div id="loading-text" style="margin-top: 20px; font-size: 18px;">正在載入資源...</div>
+	</div>
+
 	<div class="start" id="start">
-		START
+		<!-- 按一下開始 -->
+		<button class="start-btn">
+			<span class="banner-flags">
+				<span class="flag flag-yellow">S</span>
+				<span class="flag flag-blue">T</span>
+				<span class="flag flag-red">A</span>
+				<span class="flag flag-green">R</span>
+				<span class="flag flag-orange">T</span>
+			</span>
+			開始
+		</button>
 	</div>
 	
 	<div class="boxlight">
@@ -588,6 +725,147 @@ body {
 <script type="text/javascript" src="JS/jquery-ui-1.10.3.custom.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	console.log('Document ready - 開始載入資源檢查');
+	
+	// 等待所有資源載入完成的函數
+	function waitForAllResources() {
+		console.log('開始執行 waitForAllResources 函數');
+		
+		return new Promise((resolve) => {
+			let loadedCount = 0;
+			let totalCount = 0;
+			
+			// 取得進度顯示元素
+			const progressBar = document.getElementById('progress-bar');
+			const loadingText = document.getElementById('loading-text');
+			
+			if (!progressBar || !loadingText) {
+				console.error('無法找到進度顯示元素');
+				resolve();
+				return;
+			}
+			
+			console.log('開始計算需要載入的資源數量');
+			
+			// 計算需要載入的圖片數量
+			const images = document.querySelectorAll('img');
+			console.log(`找到 ${images.length} 張圖片`);
+			
+			// 計算需要載入的 CSS 文件數量  
+			const cssLinks = document.querySelectorAll('link[rel="stylesheet"]');
+			console.log(`找到 ${cssLinks.length} 個 CSS 文件`);
+			
+			// 簡化字體計算，直接設為 2
+			const fontCount = 2;
+			console.log(`預設 ${fontCount} 個字體文件`);
+			
+			totalCount = images.length + cssLinks.length + fontCount;
+			console.log(`總共需要載入 ${totalCount} 個資源`);
+			
+			// 如果沒有資源需要載入，直接完成
+			if (totalCount === 0) {
+				console.log('沒有資源需要載入，直接完成');
+				resolve();
+				return;
+			}
+			
+			function updateProgress() {
+				const percentage = Math.round((loadedCount / totalCount) * 100);
+				progressBar.style.width = percentage + '%';
+				loadingText.textContent = `載入進度 ${loadedCount}/${totalCount} (${percentage}%)`;
+				console.log(`更新進度: ${loadedCount}/${totalCount} (${percentage}%)`);
+			}
+			
+			function checkComplete() {
+				loadedCount++;
+				updateProgress();
+				console.log(`資源載入完成: ${loadedCount}/${totalCount}`);
+				
+				if (loadedCount >= totalCount) {
+					console.log('所有資源載入完成！');
+					loadingText.textContent = '載入完成！';
+					setTimeout(() => {
+						resolve();
+					}, 500);
+				}
+			}
+			
+			// 檢查圖片載入
+			console.log('開始檢查圖片載入狀態');
+			images.forEach((img, index) => {
+				console.log(`檢查圖片 ${index + 1}: ${img.src}`);
+				
+				if (img.complete && img.naturalHeight !== 0) {
+					console.log(`圖片 ${index + 1} 已載入完成`);
+					checkComplete();
+				} else {
+					console.log(`圖片 ${index + 1} 尚未載入完成，設置監聽器`);
+					img.onload = () => {
+						console.log(`圖片載入完成: ${img.src}`);
+						checkComplete();
+					};
+					img.onerror = () => {
+						console.warn(`圖片載入失敗: ${img.src}`);
+						checkComplete();
+					};
+				}
+			});
+			
+			// 檢查 CSS 載入
+			console.log('開始檢查 CSS 載入狀態');
+			cssLinks.forEach((link, index) => {
+				console.log(`檢查 CSS ${index + 1}: ${link.href}`);
+				
+				if (link.sheet) {
+					console.log(`CSS ${index + 1} 已載入完成`);
+					checkComplete();
+				} else {
+					console.log(`CSS ${index + 1} 尚未載入完成，設置監聽器`);
+					link.onload = () => {
+						console.log(`CSS 載入完成: ${link.href}`);
+						checkComplete();
+					};
+					link.onerror = () => {
+						console.warn(`CSS 載入失敗: ${link.href}`);
+						checkComplete();
+					};
+				}
+			});
+			
+			// 檢查字體載入 - 簡化處理
+			console.log('開始檢查字體載入');
+			setTimeout(() => {
+				console.log('字體載入檢查 - 使用延遲方式');
+				for (let i = 0; i < fontCount; i++) {
+					console.log(`標記字體 ${i + 1} 為載入完成`);
+					checkComplete();
+				}
+			}, 1000);
+			
+			// 設定最大等待時間（5秒）
+			setTimeout(() => {
+				console.log('載入超時，強制繼續');
+				resolve();
+			}, 5000);
+		});
+	}
+	
+	// 執行資源載入等待
+	waitForAllResources().then(() => {
+		console.log('資源載入完成，準備顯示開始畫面');
+		
+		// 隱藏載入畫面，顯示開始按鈕
+		$("#loading-screen").fadeOut(800, function() {
+			console.log('載入畫面已隱藏，顯示開始按鈕');
+		});
+	}).catch((error) => {
+		console.error('資源載入過程中發生錯誤:', error);
+		// 即使發生錯誤也要顯示開始按鈕
+		$("#loading-screen").fadeOut(800, function() {
+			$("#start").fadeIn(500);
+		});
+	});
+    
 	// 背景音樂
 	const audio = document.getElementById('audio');
 	const play = document.getElementById("start");
@@ -955,12 +1233,12 @@ $(document).ready(function() {
 					$("#mailTop").fadeOut(800);
 					$("#mailBack").fadeOut(800);
 					$(".mail").animate({
-						"top": screenH * 0.2 + "px",
+						"top": screenH * 0.25 + "px",
 						"left": screenW * 0.1 + "px"
 					}, 800);
 					$(".mail-content").delay(500).animate({
 						"opacity": 1,
-						"height": (screenH * 0.4) + "px",
+						"height": (screenH * 0.5) + "px",
 						"width": (screenW * 0.8) + "px"
 					}, 800);
 				} else if(end === 75) {
@@ -975,18 +1253,19 @@ $(document).ready(function() {
 					$(".text5").fadeIn(600);
 				} else if(end === 125) {
 					$(".text6").fadeIn(600);
-				} else if(end === 200) {
+				} else if(end === 145) {
 					$(".mail > div").fadeOut(600);
 					$(".mail p").fadeOut(600);
-					$("..mail-content").fadeOut(600);
+					$(".mail-content").fadeOut(600);
 					giftOpen = true;
 					clearInterval(endTimer);
 				}
 				end++;
 			}, 100);
 			
-			$(".gift").click(function() {
+			$("#gift").click(function() {
 				if(giftOpen) {
+					console.log("open");
 					$(".giftTop").addClass("giftOpen");
 					$("#gift").delay(1500).fadeOut(600);
 					$(".giftTop").delay(1500).fadeOut(600);
