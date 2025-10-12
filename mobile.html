@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>Secret - Mobile</title>
+    <link rel="shortcut icon" href="image/HTML5.ico" />
+    <link rel="stylesheet" type="text/css" href="CSS/balloon.css" />
+
+    <style type="text/css">
+      @font-face {
+        font-family: "Sketch";
+        src: url("font/BuxtonSketch.ttf");
+      }
+
+      @font-face {
+        font-family: "Chinese";
+        src: url("font/ChineseSketch.ttf");
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: url("image/sky.jpg") center center / cover;
+      }
+
+      /* 開始畫面 */
+      #start {
+        width: 100vw;
+        height: 100vh;
+        background: rgb(254, 120, 121);
+        position: fixed;
+        z-index: 100;
+        font-family: "Sketch";
+        font-size: 8vw;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
+      }
+
+      /* 準備飛行對話框 */
+      .boxlight {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        z-index: 99;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        font-size: 8vw;
+        font-family: "Sketch";
+        text-align: center;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .GoButton {
+        width: 35vw;
+        height: 15vw;
+        font-size: 6vw;
+        line-height: 15vw;
+        margin-top: 5vw;
+        cursor: pointer;
+        background: rgb(0, 170, 220);
+        transition: all 0.3s ease;
+        touch-action: manipulation;
+        border-radius: 2vw;
+      }
+
+      .GoButton:active {
+        background: #000;
+        color: rgb(0, 170, 220);
+        transform: scale(0.95);
+      }
+
+      /* 主容器 */
+      .main-container {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* 房間容器 */
+      .room {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        background: url("image/room_wall.jpg") center center / cover;
+      }
+
+      .room div,
+      .room img {
+        position: absolute;
+      }
+
+      .shadow {
+        opacity: 0.5;
+        display: none;
+      }
+
+      /* 女孩角色 */
+      .girl {
+        width: 25vw;
+        bottom: 0;
+        left: -25vw;
+        z-index: 5;
+      }
+
+      .girlMove {
+        left: 5vw;
+        transition: left 1s ease;
+      }
+
+      /* 地板 */
+      .floor {
+        width: 100%;
+        bottom: 0;
+        z-index: 1;
+      }
+
+      .floorMove {
+        bottom: 0;
+        animation: floorUp 1s ease-in;
+      }
+
+      @keyframes floorUp {
+        0% {
+          bottom: -30vh;
+        }
+        100% {
+          bottom: 0;
+        }
+      }
+
+      /* 牆面裝飾 */
+      .wall_paint {
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0;
+      }
+
+      .wall_paintMove {
+        opacity: 1;
+        animation: wallPaintFadeIn 1.8s ease-in;
+      }
+
+      @keyframes wallPaintFadeIn {
+        0% {
+          opacity: 0;
+        }
+        30% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* 生日橫幅 */
+      .birthday {
+        width: 100%;
+        top: 5vh;
+        left: 0;
+        z-index: 3;
+      }
+
+      .birthdayMove {
+        top: 5vh;
+        animation: birthdayDown 1.5s ease-in;
+      }
+
+      @keyframes birthdayDown {
+        0% {
+          top: -15vh;
+        }
+        100% {
+          top: 5vh;
+        }
+      }
+
+      /* 互動元素佈局 - 垂直排列適合手機 */
+      .window {
+        width: 20vw;
+        left: 5vw;
+        top: 15vh;
+        cursor: pointer;
+        display: none;
+        z-index: 4;
+      }
+
+      .light {
+        width: 25vw;
+        right: 5vw;
+        top: 12vh;
+        cursor: pointer;
+        display: none;
+        z-index: 4;
+      }
+
+      .TV {
+        width: 40vw;
+        left: 30vw;
+        top: 35vh;
+        cursor: pointer;
+        display: none;
+        z-index: 4;
+      }
+
+      .desk {
+        width: 35vw;
+        left: 10vw;
+        bottom: 25vh;
+        display: none;
+        z-index: 4;
+      }
+
+      .calender {
+        width: 12vw;
+        right: 8vw;
+        top: 25vh;
+        cursor: pointer;
+        display: none;
+        z-index: 4;
+      }
+
+      .picture {
+        width: 15vw;
+        left: 42vw;
+        top: 22vh;
+        cursor: pointer;
+        display: none;
+        z-index: 4;
+      }
+
+      .sofa {
+        width: 45vw;
+        right: 5vw;
+        bottom: 15vh;
+        cursor: pointer;
+        display: none;
+        z-index: 4;
+      }
+
+      .bear {
+        width: 8vw !important;
+        left: 15vw !important;
+        top: 8vh !important;
+      }
+
+      /* 氣球 */
+      .balloon {
+        width: 8vw;
+        top: 28vh;
+        right: 20vw;
+        cursor: pointer;
+        display: none;
+        z-index: 6;
+      }
+
+      /* 禮物盒 */
+      .gift {
+        width: 25vw;
+        left: 37.5vw;
+        top: 45vh;
+        display: none;
+        z-index: 5;
+      }
+
+      .gift img {
+        width: 100%;
+      }
+
+      .cake {
+        cursor: pointer;
+      }
+
+      /* 信件 */
+      .mail {
+        width: 20vw;
+        left: 40vw;
+        bottom: 5vh;
+        display: none;
+        z-index: 5;
+      }
+
+      .mail img {
+        width: 100%;
+      }
+
+      .mail-content {
+        position: fixed;
+        left: 5vw;
+        top: 20vh;
+        width: 90vw;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 4vw;
+        border-radius: 2vw;
+        z-index: 10;
+        display: none;
+      }
+
+      .mail-content p {
+        font-family: "Chinese";
+        font-size: 4vw;
+        color: #000;
+        margin: 2vw 0;
+        line-height: 1.5;
+        display: none;
+      }
+
+      /* 對話提示 */
+      .talk_prompt {
+        width: 25vw;
+        left: 15vw;
+        bottom: 35vh;
+        display: none;
+        z-index: 6;
+      }
+
+      .next_step {
+        width: 8vw;
+        position: absolute;
+        right: -10vw;
+        bottom: 0;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .next_step:active {
+        transform: scale(0.9) rotate(-16deg);
+      }
+
+      /* 天空元素 */
+      .sky-elements {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .cloud {
+        width: 100vw;
+        position: absolute;
+        display: none;
+      }
+
+      .hot_balloon {
+        position: fixed;
+        width: 50vw;
+        left: 25vw;
+        top: -60vh;
+        z-index: 3;
+      }
+
+      .hot_balloon img {
+        width: 100%;
+        position: relative;
+      }
+
+      .bird {
+        position: absolute;
+        width: 40vw;
+        top: 40vh;
+        left: -50vw;
+        z-index: 3;
+      }
+
+      .parachuteBear {
+        position: absolute;
+        width: 30vw;
+        left: 35vw;
+        top: -40vh;
+        z-index: 3;
+      }
+
+      .UFO {
+        position: absolute;
+        width: 30vw;
+        left: 35vw;
+        top: -40vh;
+        z-index: 3;
+      }
+
+      /* 結束畫面 */
+      .end {
+        width: 100%;
+        height: 100%;
+        display: none;
+        position: fixed;
+        z-index: 98;
+        font-family: "Sketch";
+        font-size: 6vw;
+        color: #fff;
+        text-align: center;
+        background: rgba(254, 120, 121, 0.8);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.3;
+      }
+
+      /* 動畫類別 */
+      .mailFly {
+        animation: mailFlying 3s ease;
+      }
+
+      @keyframes mailFlying {
+        0% {
+          left: 42vw;
+          bottom: 45vh;
+        }
+        25% {
+          left: 35vw;
+          bottom: 40vh;
+          transform: rotate(-15deg);
+        }
+        50% {
+          left: 45vw;
+          bottom: 30vh;
+          transform: rotate(15deg);
+        }
+        75% {
+          left: 38vw;
+          bottom: 20vh;
+          transform: rotate(-10deg);
+        }
+        100% {
+          left: 40vw;
+          bottom: 5vh;
+          transform: rotate(0deg);
+        }
+      }
+
+      .mailOpen {
+        animation: mailOpen 1.5s ease;
+        transform-origin: 0% 10%;
+        transform: rotateX(180deg);
+      }
+
+      @keyframes mailOpen {
+        0% {
+          transform: rotateX(0deg);
+        }
+        100% {
+          transform: rotateX(180deg);
+        }
+      }
+
+      .giftOpen {
+        transform-origin: 0% 60%;
+        animation: giftOpening 1.5s ease;
+        transform: rotateZ(-120deg);
+      }
+
+      @keyframes giftOpening {
+        0% {
+          transform: rotateZ(0deg);
+        }
+        100% {
+          transform: rotateZ(-120deg);
+        }
+      }
+
+      .cloudDown1 {
+        animation: cloudFly1 8s infinite linear;
+      }
+
+      @keyframes cloudFly1 {
+        0% {
+          top: -100vh;
+        }
+        100% {
+          top: 100vh;
+        }
+      }
+
+      .cloudDown2 {
+        animation: cloudFly2 8s infinite linear;
+      }
+
+      @keyframes cloudFly2 {
+        0% {
+          top: -120vh;
+        }
+        20% {
+          top: -120vh;
+        }
+        100% {
+          top: 100vh;
+        }
+      }
+
+      .birdFly {
+        animation: birdFlying 6s linear;
+      }
+
+      @keyframes birdFlying {
+        0% {
+          top: 40vh;
+          left: -50vw;
+        }
+        100% {
+          top: 10vh;
+          left: 120vw;
+        }
+      }
+
+      .bearFly {
+        animation: bearFly 4s infinite ease;
+      }
+
+      @keyframes bearFly {
+        0% {
+          left: 40vw;
+          transform: rotate(10deg);
+        }
+        25% {
+          left: 30vw;
+          transform: rotate(-8deg);
+        }
+        50% {
+          left: 40vw;
+          transform: rotate(10deg);
+        }
+        75% {
+          left: 30vw;
+          transform: rotate(-8deg);
+        }
+        100% {
+          left: 40vw;
+          transform: rotate(10deg);
+        }
+      }
+
+      .UFOFLY {
+        animation: UFOFly 4s ease;
+        top: 30vh;
+        left: 35vw;
+      }
+
+      @keyframes UFOFly {
+        0% {
+          top: -40vh;
+          transform: rotate(15deg);
+        }
+        25% {
+          top: 15vh;
+          left: 60vw;
+          transform: rotate(10deg);
+        }
+        50% {
+          top: 25vh;
+          left: 45vw;
+          transform: rotate(0deg);
+        }
+        100% {
+          top: 30vh;
+          left: 35vw;
+          transform: rotate(0deg);
+        }
+      }
+
+      /* 觸控優化 */
+      .clickable {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .clickable:active {
+        transform: scale(0.95);
+        opacity: 0.8;
+      }
+
+      /* 響應式調整 */
+      @media (max-height: 600px) {
+        .birthday {
+          top: 2vh;
+        }
+        .TV {
+          top: 25vh;
+        }
+        .desk {
+          bottom: 15vh;
+        }
+        .sofa {
+          bottom: 8vh;
+        }
+        .mail-content {
+          top: 10vh;
+        }
+      }
+
+      @media (orientation: landscape) {
+        #start {
+          font-size: 6vh;
+        }
+        .boxlight {
+          font-size: 6vh;
+        }
+        .GoButton {
+          width: 25vh;
+          height: 10vh;
+          font-size: 4vh;
+          line-height: 10vh;
+        }
+        .end {
+          font-size: 4vh;
+        }
+        .mail-content p {
+          font-size: 3vh;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- 開始畫面 -->
+    <div class="start clickable" id="start">
+      <div>點擊開始生日驚喜</div>
+    </div>
+
+    <!-- 準備飛行對話框 -->
+    <div class="boxlight">
+      <p></p>
+      <div class="GoButton clickable">GO</div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+      <!-- 房間 -->
+      <div class="room">
+        <!-- 生日橫幅 -->
+        <div class="birthday">
+          <img src="image/birthday2.png" alt="生日橫幅" />
+          <img src="image/birthday2_shadow.png" class="shadow" alt="陰影" />
+        </div>
+
+        <!-- 桌子 -->
+        <div class="desk">
+          <img src="image/desk2.png" alt="桌子" />
+          <img src="image/desk2_shadow.png" class="shadow" alt="陰影" />
+        </div>
+
+        <!-- 沙發 -->
+        <div class="sofa">
+          <img src="image/sofa.png" alt="沙發" />
+          <img src="image/sofa_pillow.png" alt="枕頭" />
+          <img src="image/bear.png" class="bear" alt="熊熊" />
+          <img src="image/sofa_cushion.png" alt="坐墊" />
+          <img src="image/sofa_shadow.png" class="shadow" alt="陰影" />
+        </div>
+
+        <!-- 氣球 -->
+        <img
+          src="image/balloon_3.png"
+          name="flying"
+          id="balloon3"
+          class="balloon clickable"
+          alt="氣球"
+        />
+
+        <!-- 禮物盒 -->
+        <div class="gift">
+          <img src="image/cake.png" class="cake clickable" alt="蛋糕" />
+          <img src="image/gift.png" id="gift" alt="禮物盒" />
+          <img src="image/gift_top.png" class="giftTop" alt="禮物盒蓋" />
+          <img src="image/gift_shadow.png" class="shadow" alt="陰影" />
+        </div>
+
+        <!-- 信件 -->
+        <div class="mail">
+          <img src="image/mail_back.png" id="mailBack" alt="信件背面" />
+          <img
+            src="image/mail_paper.png"
+            id="mailPaper"
+            class="mailPaper"
+            alt="信紙"
+          />
+          <img src="image/mail.png" id="mail" alt="信件" />
+          <img
+            src="image/mail_top.png"
+            id="mailTop"
+            class="mailTop"
+            alt="信件封面"
+          />
+        </div>
+
+        <!-- 信件內容 -->
+        <div class="mail-content">
+          <p class="text1">親愛的○○○</p>
+          <p class="text2">今天是你的生日喔!不知道你有什麼樣的願望?</p>
+          <p class="text3">正因為如此，所以我特地做了個動畫來為你慶祝</p>
+          <p class="text4">雖然時間很短，但希望我把我的心意傳達給您</p>
+          <p class="text5">
+            生日當然還是要吃蛋糕啦，點一下禮物盒，開心地吃蛋糕吧^^
+          </p>
+          <p class="text6">生日快樂喔~ ○○○</p>
+        </div>
+
+        <!-- 背景元素 -->
+        <img src="image/wall_paint.png" class="wall_paint" alt="牆面" />
+        <img src="image/room_floor2.png" class="floor" alt="地板" />
+        <img
+          src="image/room_dark_site.png"
+          id="room_shadow"
+          class="shadow"
+          alt="陰影"
+        />
+        <img src="image/girl.png" class="girl" alt="女孩" />
+
+        <!-- 簡化提示文字 -->
+        <div
+          class="simple_prompt"
+          style="
+            position: absolute;
+            bottom: 10vh;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 2vw 4vw;
+            border-radius: 2vw;
+            font-family: 'Chinese';
+            font-size: 3vw;
+            text-align: center;
+            display: none;
+            z-index: 10;
+          "
+        >
+          點擊氣球開始飛行冒險！
+        </div>
+      </div>
+
+      <!-- 天空元素 -->
+      <div class="sky-elements">
+        <img src="image/cloud2.png" class="cloud" id="cloud2" alt="雲朵2" />
+        <div class="hot_balloon">
+          <img src="image/hot_balloon_line.png" alt="繩子" />
+          <img src="image/hot_balloon.png" alt="熱氣球" />
+          <img src="image/hot_balloon_box.png" alt="籃子" />
+        </div>
+        <img src="image/cloud1.png" class="cloud" id="cloud1" alt="雲朵1" />
+        <img src="image/birdFlyUp2.png" class="bird" alt="鳥" />
+        <img
+          src="image/parachute_bear.png"
+          class="parachuteBear bearFly"
+          alt="降落傘熊"
+        />
+        <img src="image/UFO.png" class="UFO" alt="UFO" />
+      </div>
+    </div>
+
+    <!-- 結束畫面 -->
+    <div class="end">
+      <div>Happy Birthday</div>
+      <div>To You</div>
+    </div>
+
+    <audio
+      id="audio"
+      controls
+      loop
+      hidden
+      src="audio/HappyBirthday.mp3"
+      type="audio/mp3"
+    ></audio>
+
+    <script src="JS/jquery.js"></script>
+    <script src="JS/jquery-ui-1.10.3.custom.js"></script>
+    <script>
+      $(document).ready(function () {
+        const audio = document.getElementById("audio");
+        let step = 1;
+        let lightOn = true;
+        let windowDay = true;
+        let tv = true;
+        let wheelWater;
+        let gift = false;
+        let mail = false;
+        let giftOpen = false;
+
+        // 防止雙擊縮放
+        let lastTouchEnd = 0;
+        document.addEventListener(
+          "touchend",
+          function (event) {
+            let now = new Date().getTime();
+            if (now - lastTouchEnd <= 300) {
+              event.preventDefault();
+            }
+            lastTouchEnd = now;
+          },
+          false
+        );
+
+        // 開始遊戲
+        $("#start").click(function () {
+          start();
+        });
+
+        function start() {
+          // 播放音樂
+          audio.play().catch(() => {
+            // 如果自動播放失敗，顯示提示
+            console.log("Audio autoplay prevented");
+          });
+
+          $("#start").fadeOut(500);
+
+          // 簡化的房間動畫序列
+          setTimeout(() => {
+            $(".floor").addClass("floorMove");
+            $(".wall_paint").addClass("wall_paintMove");
+            $(".birthday").addClass("birthdayMove");
+          }, 200);
+
+          // 基本物件出現
+          setTimeout(() => $(".desk").fadeIn(400), 1000);
+          setTimeout(() => $(".sofa").fadeIn(400), 1200);
+          setTimeout(() => $(".shadow").fadeIn(500), 1400);
+          setTimeout(() => $(".girl").addClass("girlMove"), 1600);
+
+          // 自動觸發禮物和信件出現
+          setTimeout(() => {
+            // 自動顯示禮物
+            $(".gift").fadeIn(600);
+            $(".gift").animate({ top: "55vh" }, 1000);
+            gift = true;
+
+            // 自動顯示信件
+            $(".mail").addClass("mailFly").fadeIn(600);
+            mail = true;
+          }, 2000);
+
+          // 氣球出現
+          setTimeout(() => {
+            $(".balloon").fadeIn(500);
+            $(".simple_prompt").fadeIn(500);
+          }, 3000);
+        }
+
+        // 簡化的信件處理函數
+        function showMailText() {
+          const texts = [
+            ".text1",
+            ".text2",
+            ".text3",
+            ".text4",
+            ".text5",
+            ".text6",
+          ];
+          texts.forEach((text, index) => {
+            setTimeout(() => {
+              $(text).fadeIn(400);
+            }, index * 600); // 加快文字顯示速度
+          });
+
+          setTimeout(() => {
+            $(".mail-content").fadeOut(500);
+            giftOpen = true;
+          }, texts.length * 600 + 1500); // 縮短等待時間
+        }
+
+        // 簡化的氣球點擊
+        $(".balloon").click(function () {
+          // 隱藏提示
+          $(".simple_prompt").fadeOut(300);
+
+          // 氣球移動到中心
+          $(this).animate(
+            {
+              top: "45vh",
+              right: "37.5vw",
+            },
+            1200
+          );
+
+          setTimeout(() => {
+            $(".boxlight").fadeIn(300);
+            $(".boxlight p").text("準備起飛?");
+          }, 1200);
+        });
+
+        // 起飛按鈕
+        $(".GoButton").click(function () {
+          $(".boxlight").fadeOut(300);
+          let countdown = 3;
+
+          const countInterval = setInterval(() => {
+            if (countdown > 0) {
+              $(".boxlight p").text(countdown);
+              $(".boxlight").fadeIn(100).delay(100).fadeOut(100);
+            } else {
+              $(".boxlight p").text("起飛!");
+              $(".boxlight").fadeIn(100).delay(200).fadeOut(200);
+              clearInterval(countInterval);
+              skySequence();
+            }
+            countdown--;
+          }, 800);
+        });
+
+        function skySequence() {
+          // 房間元素離開
+          $(".room").animate({ top: "100vh" }, 2500);
+          $(".balloon").animate({ top: "5vh" }, 2000);
+          $(".hot_balloon").animate({ top: "-10vh" }, 2000);
+
+          // 天空元素出現
+          setTimeout(() => {
+            $(".cloud").fadeIn(600);
+            $("#cloud1").addClass("cloudDown1");
+            $("#cloud2").addClass("cloudDown2");
+          }, 1000);
+
+          // 鳥飛行
+          setTimeout(() => {
+            $(".bird").addClass("birdFly");
+            animateBird();
+          }, 2000);
+
+          // 降落傘熊
+          setTimeout(() => {
+            $(".parachuteBear").animate({ top: "100vh" }, 6000);
+          }, 4000);
+
+          // UFO 出現
+          setTimeout(() => {
+            $(".UFO").addClass("UFOFLY");
+            setTimeout(() => ufoSequence(), 1000);
+          }, 8000);
+        }
+
+        function animateBird() {
+          let birdState = true;
+          const birdInterval = setInterval(() => {
+            if (birdState) {
+              $(".bird").attr("src", "image/birdFlyDown2.png");
+            } else {
+              $(".bird").attr("src", "image/birdFlyUp2.png");
+            }
+            birdState = !birdState;
+          }, 300);
+
+          setTimeout(() => clearInterval(birdInterval), 6000);
+        }
+
+        function ufoSequence() {
+          let ufoIndex = 0;
+          const ufoInterval = setInterval(() => {
+            if (ufoIndex <= 13) {
+              $(".UFO").attr("src", `image/UFO_text${ufoIndex}.png`);
+            } else {
+              clearInterval(ufoInterval);
+              $(".UFO").attr("src", "image/UFO.png");
+              setTimeout(() => {
+                $(".UFO").animate(
+                  {
+                    top: "100vh",
+                    left: "60vw",
+                  },
+                  400
+                );
+                endSequence();
+              }, 300);
+            }
+            ufoIndex++;
+          }, 80);
+        }
+
+        function endSequence() {
+          $(".cloud").fadeOut(800);
+          $(".hot_balloon").animate({ top: "-60vh" }, 2000);
+
+          // 信件先出現並打開
+          setTimeout(() => {
+            $(".mail")
+              .css("position", "fixed")
+              .css("left", "40vw")
+              .css("top", "30vh")
+              .fadeIn(500);
+
+            // 信件打開動畫
+            setTimeout(() => {
+              $("#mailTop").addClass("mailOpen");
+
+              setTimeout(() => {
+                $("#mail, #mailTop, #mailBack").fadeOut(500);
+                $(".mail-content").fadeIn(500);
+                showMailText();
+
+                // 禮物出現
+                setTimeout(() => {
+                  $(".gift")
+                    .css("position", "fixed")
+                    .animate({ top: "35vh", left: "37.5vw" }, 1500);
+
+                  // 自動設置可以打開禮物
+                  giftOpen = true;
+
+                  setTimeout(() => {
+                    $(".gift").click(() => {
+                      $(".giftTop").addClass("giftOpen");
+                      setTimeout(() => {
+                        $("#gift, .giftTop").fadeOut(400);
+                        $(".cake")
+                          .animate({ top: "-15vh" }, 800)
+                          .animate({ top: "0" }, 800);
+                        setTimeout(() => {
+                          $(".end").fadeIn(800);
+                        }, 2000);
+                      }, 1000);
+                    });
+                  }, 500);
+                }, 2000);
+              }, 1500);
+            }, 1000);
+          }, 1000);
+        }
+      });
+    </script>
+  </body>
+</html>
