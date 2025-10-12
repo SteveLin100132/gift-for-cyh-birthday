@@ -401,26 +401,28 @@ body {
 .parachuteBear {
 	position: absolute;
 	z-index: 1;
-	left: 60%;
+	left: 50%;
 	top: -40%;
+	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
 	animation: bearFly 5s infinite ease;
 	-webkit-animation: bearFly 5s infinite ease;
 }
 
 @keyframes bearFly {
-	0% {left: 65%; transform: rotate(15deg);}
-	25% {left: 55%; transform: rotate(-10deg);}
-	50% {left: 65%; transform: rotate(15deg);}
-	75% {left: 55%; transform: rotate(-10deg);}
-	100% {left: 65%; transform: rotate(15deg);}
+	0% {left: 60%; transform: rotate(15deg) translateX(-50%);}
+	25% {left: 40%; transform: rotate(-10deg) translateX(-50%);}
+	50% {left: 60%; transform: rotate(15deg) translateX(-50%);}
+	75% {left: 40%; transform: rotate(-10deg) translateX(-50%);}
+	100% {left: 60%; transform: rotate(15deg) translateX(-50%);}
 }
 
 @-webkit-keyframes bearFly {
-	0% {left: 65%; -webkit-transform: rotate(15deg);}
-	25% {left: 55%; -webkit-transform: rotate(-10deg);}
-	50% {left: 65%; -webkit-transform: rotate(15deg);}
-	75% {left: 55%; -webkit-transform: rotate(-10deg);}
-	100% {left: 65%; -webkit-transform: rotate(15deg);}
+	0% {left: 60%; -webkit-transform: rotate(15deg) translateX(-50%);}
+	25% {left: 40%; -webkit-transform: rotate(-10deg) translateX(-50%);}
+	50% {left: 60%; -webkit-transform: rotate(15deg) translateX(-50%);}
+	75% {left: 40%; -webkit-transform: rotate(-10deg) translateX(-50%);}
+	100% {left: 60%; -webkit-transform: rotate(15deg) translateX(-50%);}
 }
 
 .UFO {
@@ -874,7 +876,6 @@ $(document).ready(function() {
 				}
 				
 				if(timer === 6) {
-					// $(".bird").addClass("birdFly");
 					birdAnimation();
 				} else if(timer === 24) {
 					$(".bird").css("display","none");
@@ -903,7 +904,7 @@ $(document).ready(function() {
 			$(".bird").animate({
 				"bottom": screenH + birdHeight + "px",
 				"left": screenW + birdWidth + "px"
-			}, 6500, "linear");
+			}, 7500, "linear");
 		}
 
 		function UFO() {
