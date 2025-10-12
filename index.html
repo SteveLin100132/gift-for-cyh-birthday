@@ -70,6 +70,7 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	cursor: pointer;
+	border-radius: 120px;
 	background: rgb(0,170,220);
 	transition-duration: 500ms;
 	-o-transition-duration: 500ms;
@@ -260,18 +261,25 @@ body {
 
 .mail {
 	opacity: 0;
+	position: relative;
 }
 
-.mail > div {
-	width: 500px;
-	margin-top: 50px;
-	margin-left: 60px;
+.mail > .mail-content {
+	padding: 40px;
+	top: 0;
+	left: 0;
+	width: 108px;
+	height: 74px;
+	background-color: white;
+	position: absolute;
+	opacity: 0;
+	box-sizing: border-box;
 }
 
 .mail p {
 	display: none;
 	font-family: 'Chinese';
-	font-size: 24px;
+	font-size: 3rem;
 	color: #000;
 	z-index: 5;
 }
@@ -284,8 +292,8 @@ body {
 .mailOpen {
 	animation: mailOpen 2s ease;
 	-webkit-animation: mailOpen 2s ease;
-	transform-origin: 0% 10%;
-	-webkit-transform-origin: 0% 10%;
+	transform-origin: 0% 2px;
+	-webkit-transform-origin: 0% 2px;
 	transform: rotateX(180deg);
 	-webkit-transform: rotateX(180deg);
 }
@@ -432,26 +440,28 @@ body {
 }
 
 .UFOFLY {
-	animation: UFOFly 5s ease;
-	-webkit-animation: UFOFly 5s ease;
 	top: 40%;
 	left: 25%;
+	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
+	animation: UFOFly 5s ease;
+	-webkit-animation: UFOFly 5s ease;
 }
 
 @keyframes UFOFly {
-	0% {top: -40%; transform: rotate(15deg);}
-	20% {top: 10%; left: 65%; transform: rotate(15deg);}
-	30% {top: 10%; left: 65%; transform: rotate(0deg);}
-	40% {top: 40%; left: 25%; transform: rotate(0deg);}
-	100% {top: 40%; left: 25%; transform: rotate(0deg);}
+	0% {top: -40%; transform: rotate(15deg) translateX(-50%);}
+	20% {top: 10%; left: 55%; transform: rotate(15deg) translateX(-50%);}
+	30% {top: 10%; left: 55%; transform: rotate(0deg) translateX(-50%);}
+	40% {top: 40%; left: 25%; transform: rotate(0deg) translateX(-50%);}
+	100% {top: 40%; left: 25%; transform: rotate(0deg) translateX(-50%);}
 }
 
 @-webkit-keyframes UFOFly {
-	0% {top: -40%; -webkit-transform: rotate(15deg);}
-	20% {top: 10%; left: 65%; -webkit-transform: rotate(15deg);}
-	30% {top: 10%; left: 65%; -webkit-transform: rotate(0deg);}
-	40% {top: 40%; left: 25%; -webkit-transform: rotate(0deg);}
-	100% {top: 40%; left: 25%; -webkit-transform: rotate(0deg);}
+	0% {top: -40%; -webkit-transform: rotate(15deg) translateX(-50%);}
+	20% {top: 10%; left: 55%; -webkit-transform: rotate(15deg) translateX(-50%);}
+	30% {top: 10%; left: 55%; -webkit-transform: rotate(0deg) translateX(-50%);}
+	40% {top: 40%; left: 25%; -webkit-transform: rotate(0deg) translateX(-50%);}
+	100% {top: 40%; left: 25%; -webkit-transform: rotate(0deg) translateX(-50%);}
 }
 
 .end {
@@ -531,16 +541,14 @@ body {
 		
 				<div class="mail">
 					<img src="image/mail_back.png" id="mailBack" class="mail-img" />
-					<img src="image/mail_paper.png" id="mailPaper" class="mailPaper" />
 					<img src="image/mail.png" id="mail" />
 					<img src="image/mail_top.png" id="mailTop" class="mailTop" />
-					<div>
-						<p class="text1">親愛的○○○</p>
-						<p class="text2">今天是你的生日喔!不知道你有什麼樣的願望?</p>
-						<p class="text3">正因為如此，所以我特地做了個動畫來為你慶祝</p>
-						<p class="text4">雖然時間很短，但希望我把我的心意傳達給您</p>
+					<div class="mail-content">
+						<p class="text1">Dear 耘瑄</p>
+						<p class="text2">10/19是妳的生日喔!不知道妳有什麼樣的願望?</p>
+						<p class="text3">雖然認識妳的時間不長，但希望能把我的心意傳達給妳^^</p>
 						<p class="text5">生日當然還是要吃蛋糕啦，點一下禮物盒，開心地吃蛋糕吧^^ </p>
-						<p class="text6">生日快樂喔~ ○○○ </p>
+						<p class="text6">生日快樂喔~ 耘瑄</p>
 					</div>
 				</div>
 				
@@ -818,7 +826,7 @@ $(document).ready(function() {
 						if(counter === 1800) {
 							$(".boxlight").fadeIn(500);
 							$(".boxlight").css("display", "flex");
-							$(".boxlight > p").text("Ready To Fly?");
+							$(".boxlight > p").text("Are you ready?");
 							clearInterval(balloonDown);
 						}
 					}, 100);
@@ -847,7 +855,6 @@ $(document).ready(function() {
 					$(".gift").delay(3500).animate({ "bottom": floorHeight / 2 + giftHeight + 200 + "px" }, 1000);
 
 					$(".hot_balloon").delay(700).animate({ "bottom": floorHeight + hotBalloonHeight + 120 + "px" }, 4500);
-					// $(".balloon").delay(2000).animate({ "top": -1 * balloonHeight + "px" }, 3000);
 					$(".balloon").fadeOut(600);
 					
 					$(".cloud").delay(2000).fadeIn(1000);
@@ -856,7 +863,6 @@ $(document).ready(function() {
 					$("#cloud2").addClass("cloudDown2");
 				} else if(time === -5) {
 					clearInterval(decounterTimer);
-					// $(".hot_balloon").addClass("hotBalloonFly");
 					skyRun();
 				}
 				time--;
@@ -926,13 +932,19 @@ $(document).ready(function() {
 		function skyEnd() {
 			$(".cloud").fadeOut(1200);
 			$(".hot_balloon").removeClass("hotBalloonFly");
-			$(".hot_balloon").animate({ "top":"-122%" }, 3200);
+			$(".hot_balloon").animate({ "top": -1 * hotBalloonHeight + "px" }, 3200);
 			
-			$(".mail").delay(1500).animate({ "top":"43%" }, 2000);
-			$(".mail > img ").delay(1500).animate({ "width": (screenW / 10) + "px" }, 2000);
+			$(".mail").delay(1500).animate({
+				"top": screenH / 2 - mailHeight / 2 + "px",
+				"left": screenW / 2 - mailWidth / 2 + "px"
+			}, 2000);
+			$(".mail > img").delay(1500).animate({ "width": (screenW / 10) + "px" }, 2000);
 			
-			$(".gift").delay(1500).animate({ "top":"25%", "left":"44%" }, 2000);
-			$(".gift > img ").delay(1500).animate({ "width": (screenW / 3) + "px" }, 2000);
+			$(".gift").delay(1500).animate({
+				"top": screenH / 2 - giftHeight / 2 + "px",
+				"left": screenW / 2 - giftWidth / 2 + "px"
+			}, 2000);
+			$(".gift > img").delay(1500).animate({ "width": (screenW / 3) + "px" }, 2000);
 			
 			let end = 0;
 			const endTimer = setInterval(function() {
@@ -942,8 +954,15 @@ $(document).ready(function() {
 					$("#mail").fadeOut(800);
 					$("#mailTop").fadeOut(800);
 					$("#mailBack").fadeOut(800);
-					$(".mail").animate({ "top":"15%", "left":"10%" }, 800);
-					$(".mailPaper").delay(500).animate({ "width": (screenW / 2) + "px" }, 800);
+					$(".mail").animate({
+						"top": screenH * 0.2 + "px",
+						"left": screenW * 0.1 + "px"
+					}, 800);
+					$(".mail-content").delay(500).animate({
+						"opacity": 1,
+						"height": (screenH * 0.4) + "px",
+						"width": (screenW * 0.8) + "px"
+					}, 800);
 				} else if(end === 75) {
 					$(".text1").fadeIn(600);
 				} else if(end === 85) {
@@ -959,7 +978,7 @@ $(document).ready(function() {
 				} else if(end === 200) {
 					$(".mail > div").fadeOut(600);
 					$(".mail p").fadeOut(600);
-					$(".mailPaper").fadeOut(600);
+					$("..mail-content").fadeOut(600);
 					giftOpen = true;
 					clearInterval(endTimer);
 				}
