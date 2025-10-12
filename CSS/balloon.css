@@ -20,19 +20,18 @@
 }
 
 .hotBalloonFly {
-	top: -22%;
 	animation: hotBalloonFlying infinite 3s linear;
 	-webkit-animation: hotBalloonFlying infinite 3s linear;
 }
 
 @keyframes hotBalloonFlying {
-	0% {top: -22%;}
-	50% {top: -19%;}
-	100% {top: -22%;}
+	0% {transform: translateY(50%);}
+	50% {transform: translateY(10%);}
+	100% {transform: translateY(50%);}
 }
 
 @-webkit-keyframes hotBalloonFlying {
-	0% {top: -22%;}
-	50% {top: -19%;}
-	100% {top: -22%;}
+	0% {-webkit-transform: translateY(50%);}
+	50% {-webkit-transform: translateY(10%);}
+	100% {-webkit-transform: translateY(50%);}
 }

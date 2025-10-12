@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
-	<link rel="shortcut icon" href="image/HTML5.ico">
+	<link rel="shortcut icon" href="image/gift.ico">
 	<link rel="stylesheet" type="text/css" href="CSS/balloon.css">
 	<head>
 		<meta charset="utf-8">
@@ -331,6 +331,11 @@ body {
 	background: url('image/sky.jpg');
 }
 
+.hot_balloon {
+	position: fixed;
+	z-index: 1;
+}
+
 .hot_balloon img {
 	position: absolute;
 	z-index: 2;
@@ -376,13 +381,11 @@ body {
 .bird {
 	position: absolute;
 	z-index: 1;
-	top: 60%;
-	left: -50%;
 }
 
 .birdFly {
-	animation: birdFlying 8s linear;
-	-webkit-animation: birdFlying 8s linear;
+	animation: birdFlying 5s linear;
+	-webkit-animation: birdFlying 5s linear;
 }
 
 @keyframes birdFlying {
@@ -553,14 +556,15 @@ body {
 			<div class="sky"></div>
 			
 			<img src="image/cloud2.png" class="cloud" id="cloud2" style="z-index: 0; left: 20%;" />
-			<div class="hot_balloon" style="position:fixed; z-index: 1; top: -122%; left: 28.25%;">
+
+			<div class="hot_balloon">
 				<img src="image/hot_balloon_line.png" />
-				<img src="image/hot_balloon.png" />
+				<img src="image/hot_balloon.png" class="hot-balloon-img" />
 				<img src="image/hot_balloon_box.png" />
 			</div>
 			<img src="image/cloud1.png" class="cloud" id="cloud1" style="z-index: 0;" />
 			
-			<!-- <img src="image/birdFlyUp2.png" class="bird" /> -->
+			<img src="image/birdFlyUp2.png" class="bird" />
 			<img src="image/parachute_bear.png" class="parachuteBear" />
 			<img src="image/UFO.png" class="UFO" />
 		</div>
@@ -580,9 +584,9 @@ $(document).ready(function() {
 
 	// 取得螢幕寬高
 	const width = $("body").css("width");
-	const screenW = width.slice(0, width.indexOf("px"));	
+	const screenW = parseInt(width.slice(0, width.indexOf("px")));
 	const height = $("body").css("height");
-	const screenH = height.slice(0, height.indexOf("px"));
+	const screenH = parseInt(height.slice(0, height.indexOf("px")));
 
 	// 取得房間物件高度並定位
 	const floorHeight = $(".floor").height();
@@ -610,6 +614,10 @@ $(document).ready(function() {
 	const mailWidth = $(".mail-img").width();
 	const giftHeight = $(".gift-img").height();
 	const giftWidth = $(".gift-img").width();
+	const hotBalloonHeight = $(".hot-balloon-img").height();
+	const hotBalloonWidth = $(".hot-balloon-img").width();
+	const birdHeight = $(".bird").height();
+	const birdWidth = $(".bird").width();
 
 	// 設定房間物件大小
 	$(".talk_prompt").css("height", promptHeight + "px");
@@ -643,6 +651,10 @@ $(document).ready(function() {
 	$(".mail").css("left", screenW / 2 - mailWidth / 2 + 30 + "px");
 	$(".gift").css("bottom",  screenH / 2 + giftHeight * 2 + "px");
 	$(".gift").css("left", screenW / 2 - giftWidth / 2 + 30 + "px");
+	$(".hot_balloon").css("bottom", screenH + hotBalloonHeight + "px");
+	$(".hot_balloon").css("left", screenW / 2 - hotBalloonWidth / 2 + "px");
+	$(".bird").css("bottom", "0px");
+	$(".bird").css("left", (-1 * birdWidth) + "px");
 
 	// 開始畫面設定
 	$(".start").css("line-height", $(".start").css("height"));
@@ -824,11 +836,17 @@ $(document).ready(function() {
 					$(".gift").css("position","fixed");
 					$(".balloon").removeClass("balloon3Fly");
 					$(".balloon").css("position","fixed");
-					$(".room").delay(600).animate({ "top":"100%" }, 4000);
+					
+					$(".room").delay(600).animate({ "top": "100%" }, 4000);
 					$(".room img").not(".mail > img, .gift > img, .balloon").delay(600).fadeOut(3400);
-					$(".balloon").delay(2000).animate({ "top":"3%" }, 3000);
+
+					$(".balloon").delay(3500).animate({ "bottom": floorHeight + 200 + "px" }, 1000);
+					$(".mail").delay(3500).animate({ "bottom": floorHeight + 200 + "px" }, 1000);
+					$(".gift").delay(3500).animate({ "bottom": floorHeight / 2 + giftHeight + 200 + "px" }, 1000);
+
+					$(".hot_balloon").delay(700).animate({ "bottom": floorHeight + hotBalloonHeight + 120 + "px" }, 4500);
+					// $(".balloon").delay(2000).animate({ "top": -1 * balloonHeight + "px" }, 3000);
 					$(".balloon").fadeOut(600);
-					$(".hot_balloon").delay(1500).animate({ "top":"-22%" }, 3000);
 					
 					$(".cloud").delay(2000).fadeIn(1000);
 					$("#cloud1").css("z-index", "4");
@@ -856,7 +874,8 @@ $(document).ready(function() {
 				}
 				
 				if(timer === 6) {
-					$(".bird").addClass("birdFly");
+					// $(".bird").addClass("birdFly");
+					birdAnimation();
 				} else if(timer === 24) {
 					$(".bird").css("display","none");
 				}
@@ -878,77 +897,84 @@ $(document).ready(function() {
 				
 				timer++;
 			}, 500);
-			
-			function UFO() {
-				let ufoIndex = 0;
-				const ufoTimer = setInterval(function() {
-					if(ufoIndex >= 0 && ufoIndex <= 13) {
-						$(".UFO").attr("src", "image/UFO_text"+ufoIndex+".png");
-					} else if(ufoIndex === 22) {
-						clearInterval(ufoTimer);
-						$(".UFO").attr("src", "image/UFO.png");
-						$(".UFO").delay(500).animate({ "top":"110%", "left":"60%" }, 500);
-						skyEnd();
-					}
-					ufoIndex++;
-				}, 100);
-			}
+		}
 
-			let giftOpen = false;
-			function skyEnd() {
-				$(".cloud").fadeOut(1200);
-				$(".hot_balloon").removeClass("hotBalloonFly");
-				$(".hot_balloon").animate({ "top":"-122%" }, 3200);
-				
-				$(".mail").delay(1500).animate({ "top":"43%" }, 2000);
-				$(".mail > img ").delay(1500).animate({ "width": (screenW / 10) + "px" }, 2000);
-				
-				$(".gift").delay(1500).animate({ "top":"25%", "left":"44%" }, 2000);
-				$(".gift > img ").delay(1500).animate({ "width": (screenW / 3) + "px" }, 2000);
-				
-				let end = 0;
-				const endTimer = setInterval(function() {
-					if(end === 40) {
-						$(".mailTop").addClass("mailOpen");
-					} else if(end === 65) {
-						$("#mail").fadeOut(800);
-						$("#mailTop").fadeOut(800);
-						$("#mailBack").fadeOut(800);
-						$(".mail").animate({ "top":"15%", "left":"10%" }, 800);
-						$(".mailPaper").delay(500).animate({ "width": (screenW / 2) + "px" }, 800);
-					} else if(end === 75) {
-						$(".text1").fadeIn(600);
-					} else if(end === 85) {
-						$(".text2").fadeIn(600);
-					} else if(end === 95) {
-						$(".text3").fadeIn(600);
-					} else if(end === 105) {
-						$(".text4").fadeIn(600);
-					} else if(end === 115) {
-						$(".text5").fadeIn(600);
-					} else if(end === 125) {
-						$(".text6").fadeIn(600);
-					} else if(end === 200) {
-						$(".mail > div").fadeOut(600);
-						$(".mail p").fadeOut(600);
-						$(".mailPaper").fadeOut(600);
-						giftOpen = true;
-						clearInterval(endTimer);
-					}
-					end++;
-				}, 100);
-				
-				$(".gift").click(function() {
-					if(giftOpen) {
-						$(".giftTop").addClass("giftOpen");
-						$("#gift").delay(1500).fadeOut(600);
-						$(".giftTop").delay(1500).fadeOut(600);
-						$(".cake").delay(1500).animate({ "top": "-200px" }, 1200);
-						$(".cake").delay(1500).animate({ "top": "0px" }, 1200);
-						$(".end").delay(8000).fadeIn(1000);
-					}
-				});
-			}
+		function birdAnimation() {
+			$(".bird").animate({
+				"bottom": screenH + birdHeight + "px",
+				"left": screenW + birdWidth + "px"
+			}, 6500, "linear");
+		}
+
+		function UFO() {
+			let ufoIndex = 0;
+			const ufoTimer = setInterval(function() {
+				if(ufoIndex >= 0 && ufoIndex <= 13) {
+					$(".UFO").attr("src", "image/UFO_text"+ufoIndex+".png");
+				} else if(ufoIndex === 22) {
+					clearInterval(ufoTimer);
+					$(".UFO").attr("src", "image/UFO.png");
+					$(".UFO").delay(500).animate({ "top":"110%", "left":"60%" }, 500);
+					skyEnd();
+				}
+				ufoIndex++;
+			}, 100);
+		}
+
+		let giftOpen = false;
+		function skyEnd() {
+			$(".cloud").fadeOut(1200);
+			$(".hot_balloon").removeClass("hotBalloonFly");
+			$(".hot_balloon").animate({ "top":"-122%" }, 3200);
+			
+			$(".mail").delay(1500).animate({ "top":"43%" }, 2000);
+			$(".mail > img ").delay(1500).animate({ "width": (screenW / 10) + "px" }, 2000);
+			
+			$(".gift").delay(1500).animate({ "top":"25%", "left":"44%" }, 2000);
+			$(".gift > img ").delay(1500).animate({ "width": (screenW / 3) + "px" }, 2000);
+			
+			let end = 0;
+			const endTimer = setInterval(function() {
+				if(end === 40) {
+					$(".mailTop").addClass("mailOpen");
+				} else if(end === 65) {
+					$("#mail").fadeOut(800);
+					$("#mailTop").fadeOut(800);
+					$("#mailBack").fadeOut(800);
+					$(".mail").animate({ "top":"15%", "left":"10%" }, 800);
+					$(".mailPaper").delay(500).animate({ "width": (screenW / 2) + "px" }, 800);
+				} else if(end === 75) {
+					$(".text1").fadeIn(600);
+				} else if(end === 85) {
+					$(".text2").fadeIn(600);
+				} else if(end === 95) {
+					$(".text3").fadeIn(600);
+				} else if(end === 105) {
+					$(".text4").fadeIn(600);
+				} else if(end === 115) {
+					$(".text5").fadeIn(600);
+				} else if(end === 125) {
+					$(".text6").fadeIn(600);
+				} else if(end === 200) {
+					$(".mail > div").fadeOut(600);
+					$(".mail p").fadeOut(600);
+					$(".mailPaper").fadeOut(600);
+					giftOpen = true;
+					clearInterval(endTimer);
+				}
+				end++;
+			}, 100);
+			
+			$(".gift").click(function() {
+				if(giftOpen) {
+					$(".giftTop").addClass("giftOpen");
+					$("#gift").delay(1500).fadeOut(600);
+					$(".giftTop").delay(1500).fadeOut(600);
+					$(".cake").delay(1500).animate({ "top": "-200px" }, 1200);
+					$(".cake").delay(1500).animate({ "top": "0px" }, 1200);
+					$(".end").delay(8000).fadeIn(1000);
+				}
+			});
 		}
 	}	
 });
