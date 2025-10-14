@@ -22,7 +22,7 @@
 
 html, body {
 	width: 100vw;
-	height: 100%;
+	height: 100vh;
 }
 
 body {
@@ -888,10 +888,6 @@ $(document).ready(function() {
 		const screenW = window.innerWidth;
 		const screenH = window.innerHeight;
 		
-		console.log(`視窗尺寸: ${screenW} x ${screenH}`);
-		console.log(`document 尺寸: ${document.documentElement.clientWidth} x ${document.documentElement.clientHeight}`);
-		console.log(`screen 尺寸: ${screen.width} x ${screen.height}`);
-		
 		return { width: screenW, height: screenH };
 	}
 
@@ -899,8 +895,6 @@ $(document).ready(function() {
 	const viewport = getViewportSize();
 	const screenW = viewport.width;
 	const screenH = viewport.height;
-
-	alert(`screen height ${screenH}px, body height ${$("body").css("height")}`);
 
 	// 取得房間物件高度並定位
 	const floorHeight = $(".floor").height();
