@@ -49,14 +49,14 @@ body {
 
 .start-btn {
 	position: relative;
-	padding: 18px 54px;
+	padding: 18px 74px;
 	font-size: 2rem;
 	font-family: 'Chinese';
 	font-size: 4rem;
 	color: #5e3c1a;
 	background: #ffe7ad;
 	border: 3px solid #65cfcf;
-	border-radius: 22px 36px 28px 22px / 36px 22px 22px 28px;
+	border-radius: 22px;
 	box-shadow: 0 8px 24px 0 rgba(120, 180, 255, 0.15), 0 2px 8px #fff;
 	cursor: pointer;
 	transition: transform 0.18s, box-shadow 0.18s;
@@ -881,11 +881,24 @@ $(document).ready(function() {
 	const audio = document.getElementById('audio');
 	const play = document.getElementById("start");
 
-	// 取得螢幕寬高
-	const width = $("body").css("width");
-	const screenW = parseInt(width.slice(0, width.indexOf("px")));
-	const height = $("body").css("height");
-	const screenH = parseInt(height.slice(0, height.indexOf("px")));
+	// 取得實際可視區域的寬高（排除瀏覽器 UI）
+	function getViewportSize() {
+		// 使用 window.innerWidth/Height 獲取實際可視區域
+		// 這會排除瀏覽器的導覽列、工具列等 UI 元素
+		const screenW = window.innerWidth;
+		const screenH = window.innerHeight;
+		
+		console.log(`視窗尺寸: ${screenW} x ${screenH}`);
+		console.log(`document 尺寸: ${document.documentElement.clientWidth} x ${document.documentElement.clientHeight}`);
+		console.log(`screen 尺寸: ${screen.width} x ${screen.height}`);
+		
+		return { width: screenW, height: screenH };
+	}
+
+	// 獲取視窗尺寸
+	const viewport = getViewportSize();
+	const screenW = viewport.width;
+	const screenH = viewport.height;
 
 	// 取得房間物件高度並定位
 	const floorHeight = $(".floor").height();
