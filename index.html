@@ -556,17 +556,40 @@ body {
 }
 
 .end {
+	top: 0;
+	left: 0;
+	opacity: 0;
 	width: 100%;
 	height: 100%;
-	display: none;	
+	display: none;
+	align-items: center;
+	justify-content: center;	
 	position: absolute;
 	z-index: 8;
-	font-family: 'Sketch';
-	font-size: 150px;
+	font-family: 'Chinese';
 	color: #fff;
 	text-align: center;
-	line-height: 600px;
-	background: rgba(254,120,121,0.7);
+}
+
+.end .end-title {
+	margin-top: 100%;
+	font-size: 10rem;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+}
+
+.confetti {
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	border-radius: 2px;
+	opacity: 0;
+	animation: shoot 1s ease-out forwards;
+}
+
+@keyframes shoot {
+	0% { transform: translate(0, 0) scale(1); opacity: 1; }
+	100% { transform: translate(var(--x), var(--y)) scale(0.8); opacity: 0; }
 }
 </style>
 
@@ -588,7 +611,7 @@ body {
 		color: #fff;
 		font-size: 36px;
 	">
-		<div style="margin-bottom: 30px;">載入中...</div>
+		<div style="margin-bottom: 30px;">請稍後...</div>
 		<div id="loading-progress" style="
 			width: 300px;
 			height: 6px;
@@ -604,7 +627,7 @@ body {
 				transition: width 0.3s ease;
 			"></div>
 		</div>
-		<div id="loading-text" style="margin-top: 20px; font-size: 18px;">正在載入資源...</div>
+		<div id="loading-text" style="margin-top: 20px; font-size: 18px;">正在載入...</div>
 	</div>
 
 	<div class="start" id="start">
@@ -717,7 +740,9 @@ body {
 		</div>
 	</div>
 	
-	<div class="end">Happy Birthday To You<div>
+	<div class="end" id="end">
+		<h1 class="end-title">生日快樂</h1>
+	</div>
 	<audio id="audio" controls loop hidden src="audio/HappyBirthday.mp3" type="audio/mp3"></video>
 </body>
 
@@ -725,12 +750,8 @@ body {
 <script type="text/javascript" src="JS/jquery-ui-1.10.3.custom.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	console.log('Document ready - 開始載入資源檢查');
-	
 	// 等待所有資源載入完成的函數
 	function waitForAllResources() {
-		console.log('開始執行 waitForAllResources 函數');
-		
 		return new Promise((resolve) => {
 			let loadedCount = 0;
 			let totalCount = 0;
@@ -745,22 +766,16 @@ $(document).ready(function() {
 				return;
 			}
 			
-			console.log('開始計算需要載入的資源數量');
-			
 			// 計算需要載入的圖片數量
 			const images = document.querySelectorAll('img');
-			console.log(`找到 ${images.length} 張圖片`);
 			
 			// 計算需要載入的 CSS 文件數量  
 			const cssLinks = document.querySelectorAll('link[rel="stylesheet"]');
-			console.log(`找到 ${cssLinks.length} 個 CSS 文件`);
 			
 			// 簡化字體計算，直接設為 2
 			const fontCount = 2;
-			console.log(`預設 ${fontCount} 個字體文件`);
 			
 			totalCount = images.length + cssLinks.length + fontCount;
-			console.log(`總共需要載入 ${totalCount} 個資源`);
 			
 			// 如果沒有資源需要載入，直接完成
 			if (totalCount === 0) {
@@ -773,54 +788,39 @@ $(document).ready(function() {
 				const percentage = Math.round((loadedCount / totalCount) * 100);
 				progressBar.style.width = percentage + '%';
 				loadingText.textContent = `載入進度 ${loadedCount}/${totalCount} (${percentage}%)`;
-				console.log(`更新進度: ${loadedCount}/${totalCount} (${percentage}%)`);
 			}
 			
 			function checkComplete() {
 				loadedCount++;
 				updateProgress();
-				console.log(`資源載入完成: ${loadedCount}/${totalCount}`);
 				
 				if (loadedCount >= totalCount) {
-					console.log('所有資源載入完成！');
 					loadingText.textContent = '載入完成！';
 					setTimeout(() => {
 						resolve();
-					}, 500);
+					}, 1000);
 				}
 			}
 			
 			// 檢查圖片載入
-			console.log('開始檢查圖片載入狀態');
 			images.forEach((img, index) => {
-				console.log(`檢查圖片 ${index + 1}: ${img.src}`);
-				
 				if (img.complete && img.naturalHeight !== 0) {
-					console.log(`圖片 ${index + 1} 已載入完成`);
 					checkComplete();
 				} else {
-					console.log(`圖片 ${index + 1} 尚未載入完成，設置監聽器`);
 					img.onload = () => {
-						console.log(`圖片載入完成: ${img.src}`);
 						checkComplete();
 					};
 					img.onerror = () => {
-						console.warn(`圖片載入失敗: ${img.src}`);
 						checkComplete();
 					};
 				}
 			});
 			
 			// 檢查 CSS 載入
-			console.log('開始檢查 CSS 載入狀態');
 			cssLinks.forEach((link, index) => {
-				console.log(`檢查 CSS ${index + 1}: ${link.href}`);
-				
 				if (link.sheet) {
-					console.log(`CSS ${index + 1} 已載入完成`);
 					checkComplete();
 				} else {
-					console.log(`CSS ${index + 1} 尚未載入完成，設置監聽器`);
 					link.onload = () => {
 						console.log(`CSS 載入完成: ${link.href}`);
 						checkComplete();
@@ -833,11 +833,8 @@ $(document).ready(function() {
 			});
 			
 			// 檢查字體載入 - 簡化處理
-			console.log('開始檢查字體載入');
 			setTimeout(() => {
-				console.log('字體載入檢查 - 使用延遲方式');
 				for (let i = 0; i < fontCount; i++) {
-					console.log(`標記字體 ${i + 1} 為載入完成`);
 					checkComplete();
 				}
 			}, 1000);
@@ -1213,22 +1210,22 @@ $(document).ready(function() {
 			$(".hot_balloon").animate({ "top": -1 * hotBalloonHeight + "px" }, 3200);
 			
 			$(".mail").delay(1500).animate({
-				"top": screenH / 2 - mailHeight / 2 + "px",
+				"top": screenH / 2 - mailHeight + "px",
 				"left": screenW / 2 - mailWidth / 2 + "px"
 			}, 2000);
 			$(".mail > img").delay(1500).animate({ "width": (screenW / 10) + "px" }, 2000);
 			
 			$(".gift").delay(1500).animate({
-				"top": screenH / 2 - giftHeight / 2 + "px",
-				"left": screenW / 2 - giftWidth / 2 + "px"
+				"top": screenH / 2 - giftHeight + "px",
+				"left": screenW / 2 - giftWidth + "px"
 			}, 2000);
 			$(".gift > img").delay(1500).animate({ "width": (screenW / 3) + "px" }, 2000);
 			
 			let end = 0;
 			const endTimer = setInterval(function() {
-				if(end === 40) {
+				if (end === 40) {
 					$(".mailTop").addClass("mailOpen");
-				} else if(end === 65) {
+				} else if (end === 65) {
 					$("#mail").fadeOut(800);
 					$("#mailTop").fadeOut(800);
 					$("#mailBack").fadeOut(800);
@@ -1241,40 +1238,69 @@ $(document).ready(function() {
 						"height": (screenH * 0.5) + "px",
 						"width": (screenW * 0.8) + "px"
 					}, 800);
-				} else if(end === 75) {
+				} else if (end === 75) {
 					$(".text1").fadeIn(600);
-				} else if(end === 85) {
+				} else if (end === 85) {
 					$(".text2").fadeIn(600);
-				} else if(end === 95) {
+				} else if (end === 95) {
 					$(".text3").fadeIn(600);
-				} else if(end === 105) {
+				} else if (end === 105) {
 					$(".text4").fadeIn(600);
-				} else if(end === 115) {
+				} else if (end === 115) {
 					$(".text5").fadeIn(600);
-				} else if(end === 125) {
+				} else if (end === 125) {
 					$(".text6").fadeIn(600);
-				} else if(end === 145) {
+				} else if (end === 145) {
 					$(".mail > div").fadeOut(600);
 					$(".mail p").fadeOut(600);
 					$(".mail-content").fadeOut(600);
 					giftOpen = true;
 					clearInterval(endTimer);
+
+					if (giftOpen) {
+						$(".giftTop").addClass("giftOpen");
+						$("#gift").delay(1500).fadeOut(600);
+						$(".giftTop").delay(1500).fadeOut(600);
+						$(".cake").delay(1500).animate({
+							"top": "-200px",
+							"width": screenW * 0.5 + "px",
+						}, 1200);
+						$(".gift").delay(1500).animate({ "left": screenW * 0.25 + "px" }, 1200);
+						$(".end").css("display", "flex");
+						$(".end").delay(2000).animate({ "opacity": 1 }, 800);
+
+						let confettiTimes = 0
+						const confettiInterval = setInterval(() => {
+							generateConfetti();
+							confettiTimes++;
+
+							if (confettiTimes === 5) {
+								clearInterval(confettiInterval);
+							}
+						}, 1000);
+					}
 				}
 				end++;
 			}, 100);
-			
-			$("#gift").click(function() {
-				if(giftOpen) {
-					console.log("open");
-					$(".giftTop").addClass("giftOpen");
-					$("#gift").delay(1500).fadeOut(600);
-					$(".giftTop").delay(1500).fadeOut(600);
-					$(".cake").delay(1500).animate({ "top": "-200px" }, 1200);
-					$(".cake").delay(1500).animate({ "top": "0px" }, 1200);
-					$(".end").delay(8000).fadeIn(1000);
-				}
-			});
 		}
-	}	
+	}
+
+	function generateConfetti () {
+		const end = document.getElementById('end');
+		for (let i = 0; i < 40; i++) {
+			const confetti = document.createElement('div');
+			confetti.classList.add('confetti');
+			confetti.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+			const angle = Math.random() * 2 * Math.PI;
+			const distance = Math.random() * 300 + 100;
+			confetti.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
+			confetti.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
+			confetti.style.left = '50%';
+			confetti.style.top = '50%';
+			end.appendChild(confetti);
+
+			setTimeout(() => confetti.remove(), 1000);
+		}
+	}
 });
 </script>
