@@ -900,6 +900,8 @@ $(document).ready(function() {
 	const screenW = viewport.width;
 	const screenH = viewport.height;
 
+	alert(`screen height ${screenH}px, body height ${$("body").css("height")}`);
+
 	// 取得房間物件高度並定位
 	const floorHeight = $(".floor").height();
 	const deskHeight = $(".desk-img").height();
