@@ -131,7 +131,6 @@ body {
 	height: 100dvh;
 	position: fixed;
 	z-index: 3;
-	/* background: rgba(0,0,0,0.7); */
 	background: #525181dd;
 	color: #fff;
 	font-size: 140px;
@@ -578,6 +577,10 @@ body {
 	-webkit-transform: translateY(-50%);
 }
 
+.confetti-container {
+	position: fixed;
+}
+
 .confetti {
 	position: absolute;
 	width: 10px;
@@ -600,7 +603,7 @@ body {
 		top: 0;
 		left: 0;
 		width: 100dvw;
-		height: 100vh;
+		height: 100dvh;
 		background: linear-gradient(45deg, #f6d18e, #ffb74d);
 		display: flex;
 		flex-direction: column;
@@ -657,7 +660,7 @@ body {
 				</div>
 				
 				<div class="birthday">
-					<img src="image/birthday2.png" />
+					<img src="image/birthday2.png" class="birthday-img" />
 				</div>
 				
 				<div class="TV">
@@ -756,6 +759,7 @@ body {
 	
 	<div class="end" id="end">
 		<h1 class="end-title">生日快樂</h1>
+		<div class="confetti-container" id="confetti-container"></div>
 	</div>
 	<audio id="audio" controls loop hidden src="audio/HappyBirthday.mp3" type="audio/mp3"></video>
 </body>
@@ -897,6 +901,8 @@ $(document).ready(function() {
 	const screenH = viewport.height;
 
 	// 取得房間物件高度並定位
+	const birthdayHeight = $(".birthday-img").height();
+	const birthdayWidth = $(".birthday-img").width();
 	const floorHeight = $(".floor").height();
 	const deskHeight = $(".desk-img").height();
 	const deskWidth = $(".desk-img").width();
@@ -934,6 +940,7 @@ $(document).ready(function() {
 	// 設定房間物件定位
 	const lightBottomPosition = -25;
 	const lightRightPosition = -45;
+	$(".birthday").css("bottom", screenH + birthdayHeight + "px");
 	$(".desk").css("bottom", (deskHeight + (floorHeight / 2)) + "px");
 	$(".desk").css("left", deskWidth * 0.1 + "px");
 	$(".TV").css("bottom", (tvHeight + deskHeight + (floorHeight / 2)) - 2 + "px");
@@ -981,10 +988,11 @@ $(document).ready(function() {
 		// 呈現初始的房間配置
 		$(".floor").addClass("floorMove");
 		$(".wall_paint").addClass("wall_paintMove");
-		$(".birthday").addClass("birthdayMove");
+		// $(".birthday").addClass("birthdayMove");
 		$(".balloon").addClass("balloonMove");
 
 		// 房間物件動畫
+		$(".birthday").animate({ bottom: (floorHeight + deskHeight + tvHeight + windowHeight + (birthdayHeight / 2)) + "px" }, 1500);
 		$(".window").delay(1500).animate({ opacity: 1 }, 600);
 		$(".desk").delay(1800).animate({ opacity: 1 }, 600);
 		$(".TV").delay(2000).animate({ opacity: 1 }, 600);
@@ -1298,10 +1306,14 @@ $(document).ready(function() {
 							generateConfetti();
 							confettiTimes++;
 
-							if (confettiTimes === 5) {
+							if (confettiTimes === 8) {
 								clearInterval(confettiInterval);
 							}
 						}, 1000);
+
+						$("#end").click(function() {
+							generateConfetti();
+						});
 					}
 				}
 				end++;
@@ -1310,18 +1322,23 @@ $(document).ready(function() {
 	}
 
 	function generateConfetti () {
-		const end = document.getElementById('end');
+		const confettiContainer = document.getElementById('confetti-container');
 		for (let i = 0; i < 40; i++) {
+			confettiContainer.style.left = 25 + Math.floor(Math.random() * 50) + "%";
+			confettiContainer.style.top = 5 + Math.floor(Math.random() * 50) + "%";
+
 			const confetti = document.createElement('div');
 			confetti.classList.add('confetti');
 			confetti.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+			
 			const angle = Math.random() * 2 * Math.PI;
 			const distance = Math.random() * 300 + 100;
 			confetti.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
 			confetti.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
+			
 			confetti.style.left = '50%';
 			confetti.style.top = '50%';
-			end.appendChild(confetti);
+			confettiContainer.appendChild(confetti);
 
 			setTimeout(() => confetti.remove(), 1000);
 		}
