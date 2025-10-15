@@ -708,10 +708,10 @@ body {
 					<img src="image/mail_top.png" id="mailTop" class="mailTop" />
 					<div class="mail-content">
 						<p class="text1">Dear 耘瑄</p>
-						<p class="text2">10/19是妳的生日喔!不知道妳有什麼樣的願望?</p>
-						<p class="text3">雖然認識妳的時間不長，但希望能把我的心意傳達給妳^^</p>
-						<p class="text5">生日當然還是要吃蛋糕啦，點一下禮物盒，開心地吃蛋糕吧^^ </p>
-						<p class="text6">生日快樂喔~ 耘瑄</p>
+						<p class="text2">一直以來工作一定很忙吧，希望那些讓妳覺得辛苦的日子都能快快過去</p>
+						<p class="text3">願接下來的每一天，好運小精靈都會一直圍繞在妳身邊 🧚，讓一切變得更順利</p>
+						<p class="text5">如果有什麼需要幫忙的地方，我都很願意盡一份力，有困難儘管告訴我，只要我能幫上忙的話 ^^</p>
+						<p class="text6">最後~ 祝妳生日快樂，願妳所有的願望都能實現，笑容永遠燦爛 🌈</p>
 					</div>
 				</div>
 				
@@ -1261,27 +1261,27 @@ $(document).ready(function() {
 					$("#mailTop").fadeOut(800);
 					$("#mailBack").fadeOut(800);
 					$(".mail").animate({
-						"top": screenH * 0.25 + "px",
+						"top": screenH * 0.2 + "px",
 						"left": screenW * 0.1 + "px"
 					}, 800);
 					$(".mail-content").delay(500).animate({
 						"opacity": 1,
-						"height": (screenH * 0.5) + "px",
+						"height": (screenH * 0.6) + "px",
 						"width": (screenW * 0.8) + "px"
 					}, 800);
 				} else if (end === 75) {
 					$(".text1").fadeIn(600);
-				} else if (end === 85) {
-					$(".text2").fadeIn(600);
 				} else if (end === 95) {
-					$(".text3").fadeIn(600);
-				} else if (end === 105) {
-					$(".text4").fadeIn(600);
+					$(".text2").fadeIn(600);
 				} else if (end === 115) {
+					$(".text3").fadeIn(600);
+				} else if (end === 135) {
+					$(".text4").fadeIn(600);
+				} else if (end === 155) {
 					$(".text5").fadeIn(600);
-				} else if (end === 125) {
+				} else if (end === 175) {
 					$(".text6").fadeIn(600);
-				} else if (end === 145) {
+				} else if (end === 205) {
 					$(".mail > div").fadeOut(600);
 					$(".mail p").fadeOut(600);
 					$(".mail-content").fadeOut(600);
