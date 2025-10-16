@@ -505,6 +505,9 @@ body {
 	top: -40%;
 	transform: translateX(-50%);
 	-webkit-transform: translateX(-50%);
+}
+
+.parachuteBearFly {
 	animation: bearFly 5s infinite ease;
 	-webkit-animation: bearFly 5s infinite ease;
 }
@@ -1314,6 +1317,7 @@ $(document).ready(function() {
 				}
 				
 				if(timer === 26) {
+					$(".parachuteBear").addClass("parachuteBearFly");
 					$(".parachuteBear").animate({ "top":"105%" }, 10000);
 				} else if(timer === 34) {
 					$(".parachuteBear").attr("src", "image/parachute_bear_talk2.png");
