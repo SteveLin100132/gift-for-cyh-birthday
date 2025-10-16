@@ -502,7 +502,6 @@ body {
 .parachuteBear {
 	position: absolute;
 	z-index: 1;
-	left: 50%;
 	top: -40%;
 	transform: translateX(-50%);
 	-webkit-transform: translateX(-50%);
@@ -584,6 +583,14 @@ body {
 .end .end-whisper {
 	opacity: 0;
 	margin-top: 20px;
+}
+
+.end .btn-hint {
+	top: -20px;
+	font-size: 3.5rem;
+	list-style: 3.5rem;
+	position: relative;
+	font-weight: normal;
 }
 
 .whisper-btn {
@@ -808,6 +815,7 @@ body {
 	<div class="end" id="end">
 		<h1 class="end-title">生日快樂</h1>
 		<h2 class="end-whisper">
+			<span class="btn-hint">(可以按一下喔)</span>
 			<div class="start-btn whisper-btn">
 				“我有悄悄話想對妳說”
 			</div>
@@ -989,6 +997,8 @@ $(document).ready(function() {
 	let hotBalloonWidth = 0;
 	let birdHeight = 0;
 	let birdWidth = 0;
+	let parachuteBearHeight = 0;
+	let parachuteBearWidth = 0;
 
 	// 取得實際可視區域的寬高（排除瀏覽器 UI）
 	function getViewportSize() {
@@ -1043,6 +1053,8 @@ $(document).ready(function() {
 		hotBalloonWidth = $(".hot-balloon-img").width();
 		birdHeight = $(".bird").height();
 		birdWidth = $(".bird").width();
+		parachuteBearHeight = $(".parachuteBear").height();
+		parachuteBearWidth = $(".parachuteBear").width();
 
 		// 設定房間物件大小
 		$(".talk_prompt").css("height", promptHeight + "px");
@@ -1081,6 +1093,7 @@ $(document).ready(function() {
 		$(".hot_balloon").css("left", screenW / 2 - hotBalloonWidth / 2 + "px");
 		$(".bird").css("bottom", "0px");
 		$(".bird").css("left", (-1 * birdWidth) + "px");
+		$(".parachuteBear").css("left", screenW / 2 - parachuteBearWidth / 2 + "px");
 
 		// 開始畫面設定
 		$(".start").css("line-height", $(".start").css("height"));
@@ -1432,15 +1445,15 @@ $(document).ready(function() {
 			$(".whisper-content").animate({ "opacity": 1 }, 1500);
 
 			$(".whisper-content .text1").delay(2000).animate({ opacity: 1 }, 600);
-			$(".whisper-content .text2").delay(3000).animate({ opacity: 1 }, 600);
-			$(".whisper-content .text3").delay(4000).animate({ opacity: 1 }, 600);
-			$(".whisper-content .text4").delay(5000).animate({ opacity: 1 }, 600);
-			$(".whisper-content .text5").delay(6000).animate({ opacity: 1 }, 600);
-			$(".whisper-content .text6").delay(7000).animate({ opacity: 1 }, 600);
-			$(".whisper-content .text7").delay(8500).animate({ opacity: 1, top: '0px' }, 600);
-			$(".whisper-content .text8").delay(9500).animate({ opacity: 1, top: '0px' }, 600);
-			$(".whisper-content .text9").delay(10500).animate({ opacity: 1, top: '0px' }, 600);
-			$(".whisper-content .text10").delay(11500).animate({ opacity: 1, top: '0px' }, 600);
+			$(".whisper-content .text2").delay(3500).animate({ opacity: 1 }, 600);
+			$(".whisper-content .text3").delay(5000).animate({ opacity: 1 }, 600);
+			$(".whisper-content .text4").delay(6500).animate({ opacity: 1 }, 600);
+			$(".whisper-content .text5").delay(8000).animate({ opacity: 1 }, 600);
+			$(".whisper-content .text6").delay(9500).animate({ opacity: 1 }, 600);
+			$(".whisper-content .text7").delay(11500).animate({ opacity: 1, top: '0px' }, 600);
+			$(".whisper-content .text8").delay(12500).animate({ opacity: 1, top: '0px' }, 600);
+			$(".whisper-content .text9").delay(13500).animate({ opacity: 1, top: '0px' }, 600);
+			$(".whisper-content .text10").delay(14500).animate({ opacity: 1, top: '0px' }, 600);
 		});
 	}
 
